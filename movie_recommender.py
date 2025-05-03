@@ -368,9 +368,29 @@ def main():
             st.session_state.selected_movie = "The Dark Knight"
         
         # Create two columns for the main content
-        col1, col2 = st.columns([2, 1])
+        col1, col2 = st.columns([2, 3])
         
         with col1:
+            
+            # Popular movies section
+            st.markdown('<div class="popular-movies animate-fade-in">', unsafe_allow_html=True)
+            st.markdown("## 🔥 Popular Movies")
+            st.markdown("Click on a movie to get recommendations:")
+            
+            # Get truly popular movies based on rating counts
+            popular_movies = movies.merge(
+                ratings.groupby('movieId').size().reset_index(name='count'),
+                on='movieId'
+            ).sort_values('count', ascending=False).head(10)['title'].tolist()
+            
+            for pop_movie in popular_movies:
+                if st.button(pop_movie, key=pop_movie, use_container_width=True):
+                    st.session_state.selected_movie = pop_movie
+                    st.rerun()
+            
+            st.markdown('</div>', unsafe_allow_html=True)
+        
+        with col2:
             # Input container with shadow
             st.markdown('<div class="input-container animate-fade-in">', unsafe_allow_html=True)
             
@@ -408,24 +428,6 @@ def main():
                         </div>
                         """, unsafe_allow_html=True)
         
-        with col2:
-            # Popular movies section
-            st.markdown('<div class="popular-movies animate-fade-in">', unsafe_allow_html=True)
-            st.markdown("## 🔥 Popular Movies")
-            st.markdown("Click on a movie to get recommendations:")
-            
-            # Get truly popular movies based on rating counts
-            popular_movies = movies.merge(
-                ratings.groupby('movieId').size().reset_index(name='count'),
-                on='movieId'
-            ).sort_values('count', ascending=False).head(10)['title'].tolist()
-            
-            for pop_movie in popular_movies:
-                if st.button(pop_movie, key=pop_movie, use_container_width=True):
-                    st.session_state.selected_movie = pop_movie
-                    st.rerun()
-            
-            st.markdown('</div>', unsafe_allow_html=True)
     except Exception as e:
         st.error(f"An unexpected error occurred: {str(e)}")
         st.stop()
