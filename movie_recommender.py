@@ -185,6 +185,35 @@ def apply_custom_css():
     ::-webkit-scrollbar-thumb:hover {
         background: #2B4B8C;
     }
+
+    /* Footer styling */
+    .footer {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: rgba(30, 58, 138, 0.1);
+        color: #1E3A8A;
+        padding: 0.8rem;
+        text-align: center;
+        font-size: 0.9rem;
+        border-top: 1px solid rgba(30, 58, 138, 0.1);
+        z-index: 1000;
+    }
+    
+    .footer-content {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .footer-icon {
+        font-size: 1rem;
+        opacity: 0.8;
+    }
     </style>
     """, unsafe_allow_html=True)
 
@@ -314,6 +343,9 @@ def main():
         </p>
     </div>
     """, unsafe_allow_html=True)
+
+    # Add margin at the bottom to prevent content from being hidden behind the footer
+    st.markdown('<div style="margin-bottom: 4rem;">', unsafe_allow_html=True)
     
     try:
         # Create a loading spinner for data loading
@@ -397,6 +429,19 @@ def main():
     except Exception as e:
         st.error(f"An unexpected error occurred: {str(e)}")
         st.stop()
+    
+    # Add the footer
+    st.markdown("""
+    <div class="footer">
+        <div class="footer-content">
+            <span class="footer-icon">👨‍💻</span>
+            <span>Developed By Mirza Abdul Wasay</span>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Close the margin div
+    st.markdown('</div>', unsafe_allow_html=True)
 
 if __name__ == "__main__":
     main() 
